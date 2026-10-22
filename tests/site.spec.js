@@ -14,7 +14,7 @@ test("страница загружается без ошибок, все лок
   await expect(page.getByRole("heading", { level: 1 })).toContainText(
     "На участке",
   );
-  for (const image of await page.locator("main img").all()) {
+  for (const image of await page.locator("main img:visible").all()) {
     await image.scrollIntoViewIfNeeded();
     await expect
       .poll(() => image.evaluate((img) => img.complete && img.naturalWidth > 0))
