@@ -26,9 +26,9 @@ test("страница загружается без ошибок, все лок
 
 test("фильтры показывают соответствующие постройки", async ({ page }) => {
   await page.goto("/");
-  await expect(page.locator(".product-card:visible")).toHaveCount(6);
+  await expect(page.locator(".product-card:visible")).toHaveCount(8);
   await page.getByRole("button", { name: "Для отдыха", exact: true }).click();
-  await expect(page.locator(".product-card:visible")).toHaveCount(3);
+  await expect(page.locator(".product-card:visible")).toHaveCount(5);
   await expect(
     page.getByRole("button", { name: "Подробнее: Хозблоки" }),
   ).toBeHidden();
@@ -38,7 +38,7 @@ test("фильтры показывают соответствующие пос�
     page.getByRole("button", { name: "Подробнее: Хозблоки" }),
   ).toBeVisible();
   await page.getByRole("button", { name: /Все постройки/ }).click();
-  await expect(page.locator(".product-card:visible")).toHaveCount(6);
+  await expect(page.locator(".product-card:visible")).toHaveCount(8);
 });
 
 test("карточка открывается с клавиатуры и возвращает фокус после Escape", async ({
@@ -55,6 +55,39 @@ test("карточка открывается с клавиатуры и воз�
   await page.keyboard.press("Escape");
   await expect(dialog).not.toBeVisible();
   await expect(trigger).toBeFocused();
+});
+
+test("детский домик и качели открываются и передают выбор в подбор", async ({
+  page,
+}) => {
+  await page.goto("/");
+  for (const [category, purpose] of [
+    ["Детские домики", "Детский домик"],
+    ["Качели", "Качели"],
+  ]) {
+    await page
+      .getByRole("button", { name: `Подробнее: ${category}`, exact: true })
+      .click();
+    const dialog = page.locator("#product-dialog");
+    await expect(dialog.getByRole("heading")).toHaveText(category);
+    await expect
+      .poll(() =>
+        dialog
+          .locator("img")
+          .evaluate((img) => img.complete && img.naturalWidth > 0),
+      )
+      .toBe(true);
+    await dialog.getByRole("button", { name: "Обсудить это решение" }).click();
+    await expect(
+      page.getByRole("radio", { name: purpose, exact: true }),
+    ).toBeChecked();
+    await page.keyboard.press("Escape");
+    await expect(
+      page
+        .locator("#contact-form")
+        .getByRole("option", { name: purpose, exact: true }),
+    ).toHaveCount(1);
+  }
 });
 
 test("подбор из карточки сохраняет выбор и готовит письмо без отправки", async ({

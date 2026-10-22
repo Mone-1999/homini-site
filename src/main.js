@@ -22,7 +22,7 @@ const products = [
     name: "Летние кухни",
     tag: "Готовить и собираться вместе",
     group: "rest",
-    image: "kitchen",
+    image: "kitchen-studio",
     description:
       "Место для неспешных завтраков, ужинов с друзьями и любимых рецептов на открытом воздухе.",
     details: [
@@ -37,7 +37,7 @@ const products = [
     name: "Беседки",
     tag: "Быть ближе к природе",
     group: "rest",
-    image: "gazebo",
+    image: "gazebo-studio",
     description:
       "Своя тихая точка в саду. Для длинных разговоров, книг и обедов, которые не хочется заканчивать.",
     details: [
@@ -52,7 +52,7 @@ const products = [
     name: "Хозблоки",
     tag: "У каждой вещи — своё место",
     group: "order",
-    image: "storage",
+    image: "storage-studio",
     description:
       "Аккуратное место для садового инвентаря и сезонных вещей, которое становится частью архитектуры участка.",
     details: [
@@ -67,7 +67,7 @@ const products = [
     name: "Гриль-зоны",
     tag: "Встречаться без особого повода",
     group: "rest",
-    image: "grill",
+    image: "grill-studio",
     description:
       "Открытое пространство для приготовления на огне и встреч за городом. Расположение оборудования обсуждается при подборе решения.",
     details: [
@@ -82,7 +82,7 @@ const products = [
     name: "Навесы",
     tag: "Защита в едином стиле",
     group: "order",
-    image: "carport",
+    image: "carport-studio",
     description:
       "Лаконичная постройка для автомобиля, которая поддерживает общее настроение дома и сада.",
     details: [
@@ -97,7 +97,7 @@ const products = [
     name: "Для садовой техники",
     tag: "Порядок без лишних компромиссов",
     group: "order",
-    image: "tools",
+    image: "tools-studio",
     description:
       "Удобный доступ к технике и всему, что помогает заботиться об участке. Всё необходимое рядом, а сад остаётся свободным.",
     details: [
@@ -107,6 +107,41 @@ const products = [
     ],
     purpose: "Постройка для техники",
   },
+  {
+    id: "playhouse",
+    name: "Детские домики",
+    tag: "Место для маленьких открытий",
+    group: "rest",
+    image: "playhouse-studio",
+    description:
+      "Свой маленький мир в саду: домик с крыльцом, лестницей и горкой. Формат игровой зоны подбирается под участок и возраст детей.",
+    details: [
+      "Домик с крышей и небольшим крыльцом",
+      "Варианты доступа и игровой комплектации",
+      "Расположение на участке обсуждается отдельно",
+    ],
+    purpose: "Детский домик",
+  },
+  {
+    id: "swing",
+    name: "Качели",
+    tag: "Ещё немного беззаботности",
+    group: "rest",
+    image: "swing-studio",
+    description:
+      "Деревянная рама и круглое подвесное сиденье для отдыха в саду. Размещение, крепление и условия использования согласуются для выбранного решения.",
+    details: [
+      "А-образная деревянная рама",
+      "Круглое подвесное сиденье",
+      "Свободное пространство вокруг качелей",
+    ],
+    purpose: "Качели",
+  },
+];
+const projectPurposes = [
+  ...products.map((product) => product.purpose),
+  "Домик или баня",
+  "Пока не определился",
 ];
 const faqs = [
   [
@@ -153,25 +188,25 @@ document.querySelector("#app").innerHTML = `
         <div><p class="eyebrow"><span class="small-sun"><svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M24 4v40M4 24h40M10 10l28 28M10 38l28-28" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></svg></span> АРХИТЕКТУРА ЗАГОРОДНОЙ ЖИЗНИ</p><h1 id="hero-title">На участке<br>становится <em>лучше.</em></h1></div>
         <div class="hero-aside"><p>Продуманные постройки для простых радостей. Готовить на воздухе, собираться вместе и чувствовать себя дома.</p><a class="button button-dark" href="#catalog">Найти своё решение ${arrow}</a><span class="micro-copy">От первой идеи до своего места в саду</span></div>
       </div>
-      <div class="hero-photo"><img src="${imagePath("garden")}" alt="Концепция участка с деревянным павильоном и летней кухней среди берёз" width="1536" height="1024" fetchpriority="high"/><div class="photo-top"><span class="photo-pill">ЕСТЕСТВЕННО. ПРОДУМАННО. ВМЕСТЕ.</span><span class="image-label">Архитектурная визуализация</span></div><div class="hero-photo-bottom"><span>Место для того,<br>что действительно важно.</span><a href="#approach" class="circle-link" aria-label="Узнать о подходе Homini">${diagonal}</a></div><span class="photo-index">HOMINI / ЖИЗНЬ ЗА ГОРОДОМ — 01</span></div>
+      <div class="hero-photo"><img src="${imagePath("banner-garden")}" alt="Визуализация участка Homini: летняя кухня, беседка и хозблок в саду" width="1774" height="887" fetchpriority="high"/><div class="photo-top"><span class="photo-pill">ЕСТЕСТВЕННО. ПРОДУМАННО. ВМЕСТЕ.</span><span class="image-label">Архитектурная визуализация</span></div><div class="hero-photo-bottom"><span>Место для того,<br>что действительно важно.</span><a href="#approach" class="circle-link" aria-label="Узнать о подходе Homini">${diagonal}</a></div><span class="photo-index">HOMINI / ЖИЗНЬ ЗА ГОРОДОМ — 01</span></div>
       <div class="hero-foot"><span>Дерево. Простые формы. Ваш характер.</span><a href="#catalog">Листайте, вдохновляйтесь <span>↓</span></a></div>
     </section>
 
     <section class="catalog section-wrap section-space" id="catalog" aria-labelledby="catalog-title">
       <div class="section-top"><p class="eyebrow">01 / КОЛЛЕКЦИЯ HOMINI</p><span class="section-aside">Небольшие постройки.<br>Большие перемены.</span></div>
       <div class="section-heading"><h2 id="catalog-title">Для каждой идеи —<br><em>своё место.</em></h2><p>От летней кухни до аккуратного хозблока.<br>Начните с того, что нужно вам сейчас.</p></div>
-      <div class="catalog-toolbar"><div class="filters" role="group" aria-label="Фильтр каталога"><button class="filter active" data-filter="all" aria-pressed="true">Все постройки <span>06</span></button><button class="filter" data-filter="rest" aria-pressed="false">Для отдыха</button><button class="filter" data-filter="order" aria-pressed="false">Для порядка</button></div><span class="catalog-note">Визуализации · комплектация обсуждается</span></div>
-      <div class="product-grid">${products.map((p, i) => `<button class="product-card" data-product="${p.id}" data-group="${p.group}" aria-label="Подробнее: ${p.name}"><div class="product-image"><img src="${imagePath(p.image)}" alt="Визуализация: ${p.name.toLowerCase()} из светлого дерева" width="600" height="650" loading="lazy"/><span class="product-number">0${i + 1}</span><span class="product-open">${diagonal}</span></div><div class="product-info"><div><h3>${p.name}</h3><p>${p.tag}</p></div><span>↗</span></div></button>`).join("")}</div>
+      <div class="catalog-toolbar"><div class="filters" role="group" aria-label="Фильтр каталога"><button class="filter active" data-filter="all" aria-pressed="true">Все постройки <span>${String(products.length).padStart(2, "0")}</span></button><button class="filter" data-filter="rest" aria-pressed="false">Для отдыха</button><button class="filter" data-filter="order" aria-pressed="false">Для порядка</button></div><span class="catalog-note">Визуализации · комплектация обсуждается</span></div>
+      <div class="product-grid">${products.map((p, i) => `<button class="product-card" data-product="${p.id}" data-group="${p.group}" aria-label="Подробнее: ${p.name}"><div class="product-image"><img src="${imagePath(p.image)}" alt="Визуализация: ${p.name.toLowerCase()} из светлого дерева" width="1254" height="1254" loading="lazy"/><span class="product-number">0${i + 1}</span><span class="product-open">${diagonal}</span></div><div class="product-info"><div><h3>${p.name}</h3><p>${p.tag}</p></div><span aria-hidden="true">${diagonal}</span></div></button>`).join("")}</div>
       <p class="catalog-extra">Думаете о домике или бане? <button class="inline-link" data-quiz data-purpose="Домик или баня">Обсудим вашу идею ${arrow}</button></p>
     </section>
 
     <section class="help-strip section-wrap"><div class="help-icon" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M24 4v40M4 24h40M10 10l28 28M10 38l28-28" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></svg></div><div><h3>Хороший участок начинается с вашей идеи.</h3><p>Необязательно знать модель или размеры. Расскажите, чего вам не хватает.</p></div><button class="button button-outline" data-quiz>Подобрать решение ${arrow}</button></section>
 
     <section class="approach section-space" id="approach" aria-labelledby="approach-title">
-      <div class="approach-inner section-wrap"><div class="approach-copy"><p class="eyebrow">02 / НАШ ПОДХОД</p><h2 id="approach-title">Один участок.<br>Один <em>архитектурный</em><br>язык.</h2><p>Участок складывается постепенно. Сначала место для встреч, потом летняя кухня, затем — порядок в саду.</p><p>Пусть эти решения выглядят как части одной истории. Спокойные формы, натуральное дерево и детали, которые сочетаются между собой.</p><a class="text-link" href="#details">Из чего складывается Homini ${diagonal}</a><span class="approach-signature">Всё на своём месте.</span></div><div class="approach-visual"><img src="${imagePath("garden")}" alt="Архитектурная концепция: павильон и летняя кухня в едином стиле" width="1536" height="1024" loading="lazy"/><span class="image-label">Концепция благоустройства · визуализация</span><div class="material-tag"><span class="material-dot"></span><span>Тёплое дерево.<br>Спокойная архитектура.</span></div></div></div>
+      <div class="approach-inner section-wrap"><div class="approach-copy"><p class="eyebrow">02 / НАШ ПОДХОД</p><h2 id="approach-title">Один участок.<br>Один <em>архитектурный</em><br>язык.</h2><p>Участок складывается постепенно. Сначала место для встреч, потом летняя кухня, затем — порядок в саду.</p><p>Пусть эти решения выглядят как части одной истории. Спокойные формы, натуральное дерево и детали, которые сочетаются между собой.</p><a class="text-link" href="#details">Из чего складывается Homini ${diagonal}</a><span class="approach-signature">Всё на своём месте.</span></div><div class="approach-visual"><img src="${imagePath("banner-garden")}" alt="Летняя кухня, беседка и хозблок Homini в едином архитектурном стиле" width="1774" height="887" loading="lazy"/><span class="image-label">Концепция благоустройства · визуализация</span><div class="material-tag"><span class="material-dot"></span><span>Тёплое дерево.<br>Спокойная архитектура.</span></div></div></div>
     </section>
 
-    <section class="details section-wrap section-space" id="details" aria-labelledby="details-title"><div class="section-top"><p class="eyebrow">03 / ВНИМАНИЕ К ДЕТАЛЯМ</p></div><div class="section-heading"><h2 id="details-title">Красота — в том,<br><em>как всё устроено.</em></h2><p>Не только внешний вид.<br>Удобство, которое остаётся с вами каждый день.</p></div><div class="detail-grid"><article class="detail-card"><div class="detail-image wood-texture"><img src="${imagePath("wood")}" alt="Деревянная обшивка на визуализации хозблока" width="600" height="540" loading="lazy"/><span>01</span></div><h3>Материал с характером</h3><p>Фактура дерева задаёт настроение. Породу, покрытие и рекомендации по уходу согласуем под условия использования.</p></article><article class="detail-card"><div class="detail-image"><img src="${imagePath("joint")}" alt="Металлическое соединение деревянных элементов из приложенного макета" width="600" height="540" loading="lazy"/><span>02</span></div><h3>Честные детали</h3><p>Соединения, пропорции и аккуратные линии. Конструктивные решения уточняются для каждого типа постройки.</p></article><article class="detail-card"><div class="detail-image"><img src="${imagePath("living")}" alt="Визуализация летней кухни с местом для хранения дров и рабочей зоной" width="600" height="540" loading="lazy"/><span>03</span></div><h3>Место для жизни</h3><p>Где поставить стол, как подойти к грилю, куда убрать нужное. Начинаем с того, как вы будете пользоваться пространством.</p></article></div></section>
+    <section class="details section-wrap section-space" id="details" aria-labelledby="details-title"><div class="section-top"><p class="eyebrow">03 / ВНИМАНИЕ К ДЕТАЛЯМ</p></div><div class="section-heading"><h2 id="details-title">Красота — в том,<br><em>как всё устроено.</em></h2><p>Не только внешний вид.<br>Удобство, которое остаётся с вами каждый день.</p></div><div class="detail-grid"><article class="detail-card"><div class="detail-image wood-texture"><img src="${imagePath("storage-studio")}" alt="Деревянная обшивка на визуализации хозблока" width="1254" height="1254" loading="lazy"/><span>01</span></div><h3>Материал с характером</h3><p>Фактура дерева задаёт настроение. Породу, покрытие и рекомендации по уходу согласуем под условия использования.</p></article><article class="detail-card"><div class="detail-image"><img src="${imagePath("connector-detail")}" alt="Визуализация чёрного металлического коннектора на деревянных балках" width="1254" height="1254" loading="lazy"/><span>02</span></div><h3>Честные детали</h3><p>Соединения, пропорции и аккуратные линии. Конструктивные решения уточняются для каждого типа постройки.</p></article><article class="detail-card"><div class="detail-image"><img src="${imagePath("kitchen-studio")}" alt="Визуализация летней кухни с местом для хранения дров и рабочей зоной" width="1254" height="1254" loading="lazy"/><span>03</span></div><h3>Место для жизни</h3><p>Где поставить стол, как подойти к грилю, куда убрать нужное. Начинаем с того, как вы будете пользоваться пространством.</p></article></div></section>
 
     <section class="budget section-wrap" aria-labelledby="budget-title"><div><p class="eyebrow">ПОНЯТНЫЙ СОСТАВ ПРОЕКТА</p><h2 id="budget-title">Сначала ясность.<br><em>Потом — стройка.</em></h2><p>Стоимость — это не только сама постройка.<br>Обсудим детали, чтобы вы понимали,<br>из чего складывается ваш бюджет.</p><button class="button button-dark" data-quiz>Подготовить запрос на расчёт ${arrow}</button></div><div class="estimate"><div class="estimate-top"><span>ВАШ ПРОЕКТ HOMINI</span><span>↗</span></div><h3>Всё по пунктам</h3><div class="estimate-row"><span><i>01</i> Постройка</span><span>Конструкция и размеры</span></div><div class="estimate-row"><span><i>02</i> Комплектация</span><span>Отделка и оснащение</span></div><div class="estimate-row"><span><i>03</i> Доставка</span><span>Маршрут до участка</span></div><div class="estimate-row"><span><i>04</i> Установка</span><span>Основание и монтаж</span></div><p>Точный состав и стоимость фиксируются<br>после согласования проекта.</p><span class="estimate-stamp">h.</span></div></section>
 
@@ -179,14 +214,14 @@ document.querySelector("#app").innerHTML = `
 
     <section class="faq section-wrap section-space" id="faq" aria-labelledby="faq-title"><div class="faq-intro"><p class="eyebrow">05 / ЕСТЬ ВОПРОСЫ?</p><h2 id="faq-title">Давайте<br><em>разберёмся.</em></h2><p>Важное, о чём стоит поговорить<br>до начала вашего проекта.</p><button class="text-link" data-quiz>Задать свой вопрос ${diagonal}</button></div><div class="faq-list">${faqs.map(([q, a]) => `<details><summary>${q}<span class="faq-plus" aria-hidden="true"></span></summary><p>${a}</p></details>`).join("")}</div></section>
 
-    <section class="contact section-wrap" id="contact" aria-labelledby="contact-title"><div class="contact-copy"><p class="eyebrow">С ЧЕГО НАЧНЁТСЯ ВАША ИСТОРИЯ?</p><h2 id="contact-title">В саду есть место<br><em>для вашей идеи.</em></h2><p>Расскажите, каким вы видите свой участок.<br>Начнём с задачи, а детали соберём вместе.</p><span class="contact-flower" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M24 4v40M4 24h40M10 10l28 28M10 38l28-28" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></svg></span></div><form id="contact-form" class="contact-form"><label for="project-purpose">Что хотите построить?</label><select id="project-purpose" name="purpose" required><option value="" disabled selected>Выберите постройку</option>${["Летняя кухня", "Беседка", "Гриль-зона", "Хозблок", "Навес", "Постройка для техники", "Домик или баня", "Пока не определился"].map((p) => `<option>${p}</option>`).join("")}</select><label for="project-region">Где находится участок?</label><input id="project-region" name="region" placeholder="Область, населённый пункт" maxlength="160" required autocomplete="address-level2"/><label for="project-contact">Как с вами связаться?</label><input id="project-contact" name="contact" placeholder="Телефон, Telegram или email" maxlength="160" required/><label class="check-label"><input type="checkbox" name="local-processing" required/><span>Согласен использовать указанные данные для подготовки письма Homini. До отправки они остаются в моём браузере.</span></label><button class="button button-dark" type="submit">Подготовить заявку ${arrow}</button><p class="form-note">Подготовим письмо на ${contactEmail}. Проверьте текст и отправьте его в своём почтовом приложении.</p></form></section>
+    <section class="contact section-wrap" id="contact" aria-labelledby="contact-title"><div class="contact-copy"><p class="eyebrow">С ЧЕГО НАЧНЁТСЯ ВАША ИСТОРИЯ?</p><h2 id="contact-title">В саду есть место<br><em>для вашей идеи.</em></h2><p>Расскажите, каким вы видите свой участок.<br>Начнём с задачи, а детали соберём вместе.</p><span class="contact-flower" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M24 4v40M4 24h40M10 10l28 28M10 38l28-28" stroke="currentColor" stroke-width="4" stroke-linecap="round"/></svg></span></div><form id="contact-form" class="contact-form"><label for="project-purpose">Что хотите построить?</label><select id="project-purpose" name="purpose" required><option value="" disabled selected>Выберите постройку</option>${projectPurposes.map((p) => `<option>${p}</option>`).join("")}</select><label for="project-region">Где находится участок?</label><input id="project-region" name="region" placeholder="Область, населённый пункт" maxlength="160" required autocomplete="address-level2"/><label for="project-contact">Как с вами связаться?</label><input id="project-contact" name="contact" placeholder="Телефон, Telegram или email" maxlength="160" required/><label class="check-label"><input type="checkbox" name="local-processing" required/><span>Согласен использовать указанные данные для подготовки письма Homini. До отправки они остаются в моём браузере.</span></label><button class="button button-dark" type="submit">Подготовить заявку ${arrow}</button><p class="form-note">Подготовим письмо на ${contactEmail}. Проверьте текст и отправьте его в своём почтовом приложении.</p></form></section>
   </main>
   <footer class="footer section-wrap"><div class="footer-top"><a class="brand" href="#top" aria-label="Homini — в начало страницы">${logo}</a><p>Постройки, с которыми<br>на участке становится лучше.</p><a class="footer-email" href="mailto:${contactEmail}">${contactEmail} ${diagonal}</a><a class="footer-up" href="#top">Наверх ↑</a></div><div class="footer-bottom"><span>© ${new Date().getFullYear()} Homini</span><button class="subtle-link" id="privacy-button">О данных и визуализациях</button><span>Создаём место для жизни.</span></div></footer>
 
   <dialog id="product-dialog" class="product-dialog" aria-labelledby="product-title"><button class="dialog-close" data-close aria-label="Закрыть">×</button><div id="product-content"></div></dialog>
   <dialog id="quiz-dialog" class="quiz-dialog" aria-labelledby="quiz-title"><button class="dialog-close" data-close aria-label="Закрыть">×</button><div id="quiz-content"></div></dialog>
   <dialog id="result-dialog" class="result-dialog" aria-labelledby="result-title"><button class="dialog-close" data-close aria-label="Закрыть">×</button><p class="eyebrow">ПЕРВЫЙ ШАГ СДЕЛАН</p><h2 id="result-title">Ваша идея<br><em>уже в деталях.</em></h2><p class="result-explanation">Письмо подготовлено для ${contactEmail}. Откройте его в почтовом приложении, проверьте и отправьте. Если почта не настроена, скопируйте текст.</p><textarea id="request-text" aria-label="Текст подготовленной заявки" readonly rows="8"></textarea><a id="email-request" class="button button-dark">Открыть письмо ${arrow}</a><button id="copy-request" class="text-link">Скопировать заявку ${arrow}</button><p id="copy-status" role="status" aria-live="polite"></p><button id="download-request" class="text-link">Скачать текст заявки ↓</button></dialog>
-  <dialog id="privacy-dialog" class="privacy-dialog" aria-labelledby="privacy-title"><button class="dialog-close" data-close aria-label="Закрыть">×</button><p class="eyebrow">ПРОЗРАЧНОСТЬ</p><h2 id="privacy-title">О сайте и данных</h2><p>Сайт представляет концепцию коллекции Homini. Изображения построек — визуализации, а не фотографии реализованных объектов. Итоговые характеристики, материалы, условия, цены и сроки необходимо согласовать отдельно.</p><p>Формы подготавливают текст письма только в вашем браузере. Сайт не отправляет данные на сервер и не сохраняет их в localStorage. Вы самостоятельно отправляете письмо на ${contactEmail} через свой почтовый сервис. Аналитика и рекламные cookies не используются. Для серверного приёма заявок потребуется отдельная политика обработки персональных данных с реквизитами оператора.</p><p>Визуализации каталога взяты из предоставленного макета. Изображение сада создано как архитектурная концепция.</p></dialog>
+  <dialog id="privacy-dialog" class="privacy-dialog" aria-labelledby="privacy-title"><button class="dialog-close" data-close aria-label="Закрыть">×</button><p class="eyebrow">ПРОЗРАЧНОСТЬ</p><h2 id="privacy-title">О сайте и данных</h2><p>Сайт представляет концепцию коллекции Homini. Изображения построек — визуализации, а не фотографии реализованных объектов. Итоговые характеристики, материалы, условия, цены и сроки необходимо согласовать отдельно.</p><p>Формы подготавливают текст письма только в вашем браузере. Сайт не отправляет данные на сервер и не сохраняет их в localStorage. Вы самостоятельно отправляете письмо на ${contactEmail} через свой почтовый сервис. Аналитика и рекламные cookies не используются. Для серверного приёма заявок потребуется отдельная политика обработки персональных данных с реквизитами оператора.</p><p>Изображения созданы как визуализации по предоставленным референсам построек и чёрных коннекторов Homini. Общий вид сада показывает архитектурную концепцию.</p></dialog>
 `;
 
 // Dialogs retain native focus trapping and return focus to their trigger.
@@ -307,6 +342,7 @@ document
 function renderQuiz() {
   const purposes = [
     "Отдых и встречи",
+    "Игры на участке",
     "Домик или баня",
     "Хранение",
     "Автомобиль и техника",

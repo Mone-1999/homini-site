@@ -2230,6 +2230,65 @@ dialog::backdrop {
     margin-right: 12px;
   }
 }
+/* The new collection uses square studio images and one wide garden scene. */
+.wood-texture > img {
+  transform: scale(2.2);
+  transform-origin: 72% 65%;
+}
+@media (min-width: 1200px) {
+  .product-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+@media (min-width: 681px) and (max-width: 1199px) {
+  .product-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 680px) {
+  .hero-photo {
+    height: auto;
+    background: var(--green);
+    color: var(--ink);
+  }
+  .hero-photo > img {
+    height: auto;
+    aspect-ratio: 2 / 1;
+    object-fit: contain;
+  }
+  .hero-photo::after {
+    display: none;
+  }
+  .photo-top {
+    gap: 5px;
+    top: 12px;
+    left: 12px;
+  }
+  .photo-pill,
+  .photo-top .image-label {
+    color: white;
+    background: #243424a8;
+  }
+  .photo-top .image-label {
+    font-size: 7px;
+    padding: 2px 5px;
+    border-radius: 2px;
+  }
+  .hero-photo-bottom {
+    position: relative;
+    inset: auto;
+    padding: 20px 18px 46px;
+    align-items: center;
+    gap: 15px;
+  }
+  .hero-photo-bottom > span {
+    font-size: 21px;
+  }
+  .hero-photo-bottom .circle-link {
+    flex-shrink: 0;
+    border-color: #a0a892;
+  }
+}
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
