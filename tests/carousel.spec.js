@@ -11,11 +11,11 @@ test("слайдер переключается стрелками, индика
   for (const count of ["02 / 03", "03 / 03", "01 / 03"]) {
     await next.click();
     await expect(page.locator("#slide-count")).toHaveText(count);
-    await expect(page.locator(".slide:visible")).toHaveCount(1);
+    await expect(page.locator('.slide[aria-hidden="false"]')).toHaveCount(1);
     await expect
       .poll(() =>
         page
-          .locator(".slide:visible img")
+          .locator('.slide[aria-hidden="false"] img')
           .evaluate((img) => img.complete && img.naturalWidth > 0),
       )
       .toBe(true);
@@ -106,7 +106,50 @@ test("при уменьшении движения анимация слайда
   await expect(page.locator("#slide-count")).toHaveText("02 / 03");
   expect(
     await page
-      .locator(".slide:visible")
+      .locator('.slide[aria-hidden="false"]')
       .evaluate((el) => getComputedStyle(el).animationName),
   ).toBe("none");
+});
+
+test("кадр следует за пальцем до отпускания и допускает смену направления", async ({
+  page,
+}) => {
+  await page.goto("/");
+  const stage = await page.locator(".slider-stage").boundingBox();
+  const slide = page.locator("#slide-1 img");
+  const initial = await slide.boundingBox();
+  const x = stage.x + stage.width * 0.65;
+  const y = stage.y + stage.height / 2;
+  await page.mouse.move(x, y);
+  await page.mouse.down();
+  await page.mouse.move(x - 90, y, { steps: 8 });
+  const left = await slide.boundingBox();
+  expect(initial.x - left.x).toBeGreaterThan(60);
+  await page.mouse.move(x - 25, y, { steps: 8 });
+  const reversed = await slide.boundingBox();
+  expect(reversed.x - left.x).toBeGreaterThan(40);
+  await page.mouse.up();
+  await expect(page.locator("#slide-count")).toHaveText("01 / 03");
+  await expect
+    .poll(async () => Math.abs((await slide.boundingBox()).x - initial.x))
+    .toBeLessThan(1);
+});
+
+test("уменьшенное движение сохраняет свайп и переключает кадр без прокрутки", async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/");
+  const stage = await page.locator(".slider-stage").boundingBox();
+  const start = await page.locator("#slide-1").boundingBox();
+  const x = stage.x + stage.width * 0.7;
+  const y = stage.y + stage.height / 2;
+  await page.mouse.move(x, y);
+  await page.mouse.down();
+  await page.mouse.move(x - 120, y, { steps: 6 });
+  expect((await page.locator("#slide-1").boundingBox()).x).toBe(start.x);
+  await page.mouse.up();
+  await expect(page.locator("#slide-count")).toHaveText("02 / 03");
+  const image = await page.locator("#slide-2").boundingBox();
+  expect(Math.abs(image.x - stage.x)).toBeLessThan(1);
 });

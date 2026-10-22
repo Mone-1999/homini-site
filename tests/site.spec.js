@@ -12,9 +12,15 @@ test("страница загружается без ошибок, все лок
   await page.goto("/");
   await expect(page).toHaveTitle(/Homini/);
   await expect(page.getByRole("heading", { level: 1 })).toContainText(
-    "На участке",
+    "Постройки",
   );
   for (const image of await page.locator("main img:visible").all()) {
+    if (
+      await image.evaluate((img) =>
+        Boolean(img.closest('[aria-hidden="true"]')),
+      )
+    )
+      continue;
     await image.scrollIntoViewIfNeeded();
     await expect
       .poll(() => image.evaluate((img) => img.complete && img.naturalWidth > 0))
@@ -225,3 +231,93 @@ for (const width of [320, 390, 768, 1024, 1440]) {
     expect(quiz.x + quiz.width).toBeLessThanOrEqual(width);
   });
 }
+
+test("ошибка контакта видна до отправки и не сдвигает следующий элемент", async ({
+  page,
+}) => {
+  await page.goto("/");
+  const contact = page.getByLabel("Как с вами связаться?", { exact: true });
+  const checkbox = page.locator('#contact-form input[type="checkbox"]');
+  await contact.fill("ошибка");
+  const before = await checkbox.evaluate(
+    (el) => el.getBoundingClientRect().top + scrollY,
+  );
+  await checkbox.check();
+  await expect(contact).toHaveAttribute("aria-invalid", "true");
+  await expect(page.locator("#contact-form-contact-error")).toHaveText(
+    "Укажите телефон, email или @username.",
+  );
+  expect(
+    await checkbox.evaluate((el) => el.getBoundingClientRect().top + scrollY),
+  ).toBe(before);
+  await expect(checkbox).toBeChecked();
+  await contact.fill("name@example.com");
+  await expect(contact).not.toHaveAttribute("aria-invalid", "true");
+  await expect(page.locator("#contact-form-contact-error")).toBeEmpty();
+});
+
+test("выбранная постройка сохраняется между карточкой, формой и повторным подбором", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await page
+    .getByRole("button", { name: "Подробнее: Беседки", exact: true })
+    .click();
+  await page.getByRole("button", { name: "Обсудить это решение" }).click();
+  await page.keyboard.press("Escape");
+  await expect(page.locator("#project-purpose")).toHaveValue("Беседка");
+  await page.locator(".help-strip [data-quiz]").click();
+  await expect(
+    page.getByRole("radio", { name: "Беседка", exact: true }),
+  ).toBeChecked();
+  await page.keyboard.press("Escape");
+  await page.locator("#project-purpose").selectOption("Навес");
+  await page.locator(".help-strip [data-quiz]").click();
+  await expect(
+    page.getByRole("radio", { name: "Навес", exact: true }),
+  ).toBeChecked();
+});
+
+test("мобильные поля имеют читаемый размер, основные кнопки — достаточную область нажатия", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+  const minSize = await page
+    .locator('#contact-form input:not([type="checkbox"]), #contact-form select')
+    .evaluateAll((fields) =>
+      Math.min(
+        ...fields.map((field) => parseFloat(getComputedStyle(field).fontSize)),
+      ),
+    );
+  expect(minSize).toBeGreaterThanOrEqual(16);
+  for (const selector of [
+    "#next-slide",
+    "#previous-slide",
+    ".slider-dot",
+    ".hero .button",
+    ".menu-toggle",
+  ]) {
+    const box = await page.locator(selector).first().boundingBox();
+    expect(box.height).toBeGreaterThanOrEqual(44);
+    expect(box.width).toBeGreaterThanOrEqual(44);
+  }
+  const catalog = await page.locator("#catalog").boundingBox();
+  expect(catalog.y).toBeLessThan(1000);
+});
+
+test("мобильная страница остаётся в границах экрана при увеличении текста до 200%", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+  await page.evaluate(() => {
+    document.documentElement.style.fontSize = "200%";
+  });
+  await page.evaluate(() => document.fonts.ready);
+  expect(
+    await page.evaluate(() => document.documentElement.scrollWidth),
+  ).toBeLessThanOrEqual(390);
+  await page.getByRole("button", { name: "Открыть меню" }).click();
+  await expect(page.locator("#mobile-nav")).toBeVisible();
+});

@@ -5,6 +5,7 @@ import { contactEmail } from "./config.js";
 import { arrow, diagonal } from "./icons.js";
 import { renderPage } from "./layout.js";
 import { initCarousel } from "./carousel.js";
+import { bindValidation } from "./validation.js";
 const imagePath = (name) => `${import.meta.env.BASE_URL}images/${name}.webp`;
 document.querySelector("#app").innerHTML = renderPage();
 initCarousel(document.querySelector(".hero-visual"));
@@ -60,6 +61,11 @@ document.querySelectorAll("[data-filter]").forEach((button) =>
         button.dataset.filter !== "all" &&
         card.dataset.group !== button.dataset.filter;
     });
+    const visibleCount = document.querySelectorAll(
+      ".product-card:not([hidden])",
+    ).length;
+    document.querySelector("#catalog-status").textContent =
+      `Показано построек: ${visibleCount}`;
   }),
 );
 
@@ -90,14 +96,25 @@ document.querySelectorAll("[data-product]").forEach((button) =>
   button.addEventListener("click", () => {
     const p = products.find((p) => p.id === button.dataset.product);
     document.querySelector("#product-content").innerHTML =
-      `<div class="modal-product-image"><img src="${imagePath(p.image)}" alt="Визуализация: ${p.name}"/><span class="image-label">Визуализация</span></div><div class="modal-product-copy"><p class="eyebrow">КОЛЛЕКЦИЯ HOMINI</p><h2 id="product-title">${p.name}</h2><p>${p.description}</p><ul>${p.details.map((d) => `<li>${d}</li>`).join("")}</ul><div class="product-terms"><strong>Под ваш участок</strong><p>Размеры, комплектация, стоимость, основание, сроки и условия гарантии уточняются при расчёте. Изображение показывает концепцию.</p></div><button class="button button-dark" id="product-request">Обсудить это решение ${arrow}</button></div>`;
+      `<div class="modal-product-image"><img src="${imagePath(p.image)}" alt="Визуализация: ${p.name}"/><span class="image-label">Визуализация</span></div><div class="modal-product-copy"><p class="eyebrow">Коллекция Homini</p><h2 id="product-title">${p.name}</h2><p>${p.description}</p><ul>${p.details.map((d) => `<li>${d}</li>`).join("")}</ul><div class="product-terms"><strong>Под ваш участок</strong><p>Размеры, комплектация, стоимость, основание, сроки и условия гарантии уточняются при расчёте. Изображение показывает концепцию.</p></div><button class="button button-dark" id="product-request">Обсудить это решение ${arrow}</button></div>`;
     document.querySelector("#product-request").addEventListener("click", () => {
       document.querySelector("#product-dialog").close();
+      selectPurpose(p.purpose);
       startQuiz(p.purpose);
     });
     openDialog("product-dialog");
   }),
 );
+
+let selectedPurpose = "";
+function selectPurpose(purpose) {
+  selectedPurpose = purpose;
+  const field = document.querySelector("#project-purpose");
+  if (![...field.options].some((option) => option.value === purpose))
+    field.add(new Option(purpose, purpose));
+  field.value = purpose;
+  field.dispatchEvent(new Event("change"));
+}
 
 let quizStep = 0;
 let quizData = { purpose: "", region: "", contact: "" };
@@ -110,7 +127,9 @@ function escapeHtml(s) {
       ],
   );
 }
-function startQuiz(purpose = "") {
+function startQuiz(
+  purpose = selectedPurpose || document.querySelector("#project-purpose").value,
+) {
   closeMenu();
   quizStep = 0;
   quizData = { purpose, region: "", contact: "" };
@@ -121,7 +140,7 @@ document
   .querySelectorAll("[data-quiz]")
   .forEach((button) =>
     button.addEventListener("click", () =>
-      startQuiz(button.dataset.purpose || ""),
+      startQuiz(button.dataset.purpose || undefined),
     ),
   );
 function renderQuiz() {
@@ -139,26 +158,25 @@ function renderQuiz() {
     "Оставим место<br>для разговора.",
   ][quizStep];
   document.querySelector("#quiz-content").innerHTML =
-    `<p class="eyebrow">ПОДБОР РЕШЕНИЯ / 0${quizStep + 1} ИЗ 03</p><div class="quiz-progress"><span style="width:${((quizStep + 1) / 3) * 100}%"></span></div><h2 id="quiz-title">${title}</h2><p class="quiz-subtitle">${["Начнём со сценария. Размеры и материалы обсудим позже.", "Укажите область и населённый пункт — это поможет обсудить доставку.", "Укажите удобный способ связи. Затем подготовим письмо для Homini."][quizStep]}</p><form id="quiz-form">${quizStep === 0 ? `<fieldset class="purpose-options"><legend class="sr-only">Для чего нужна постройка?</legend>${[...new Set([...(quizData.purpose && !purposes.includes(quizData.purpose) ? [quizData.purpose] : []), ...purposes])].map((p) => `<label><input type="radio" name="purpose" value="${escapeHtml(p)}" ${quizData.purpose === p ? "checked" : ""} required/><span>${escapeHtml(p)} ${diagonal}</span></label>`).join("")}</fieldset>` : quizStep === 1 ? `<label class="field-label" for="quiz-region">Местоположение участка</label><input id="quiz-region" name="region" placeholder="Например, Московская область, Истра" autocomplete="address-level2" maxlength="160" value="${escapeHtml(quizData.region)}" required/>` : `<label class="field-label" for="quiz-contact">Телефон, Telegram или email</label><input id="quiz-contact" name="contact" placeholder="Как с вами связаться?" maxlength="160" value="${escapeHtml(quizData.contact)}" required/><label class="check-label"><input type="checkbox" required/><span>Понимаю, что письмо нужно проверить и отправить в моём почтовом приложении.</span></label>`}<div class="quiz-actions">${quizStep ? '<button type="button" id="quiz-back" class="back-button">← Назад</button>' : '<span class="quiz-time">Всего три простых шага</span>'}<button type="submit" class="button button-dark">${quizStep === 2 ? "Подготовить заявку" : "Дальше"} ${arrow}</button></div></form>`;
+    `<p class="eyebrow">Подбор решения · ${quizStep + 1} из 3</p><div class="quiz-progress"><span style="width:${((quizStep + 1) / 3) * 100}%"></span></div><h2 id="quiz-title">${title}</h2><p class="quiz-subtitle">${["Начнём со сценария. Размеры и материалы обсудим позже.", "Укажите область и населённый пункт — это поможет обсудить доставку.", "Укажите удобный способ связи. Затем подготовим письмо для Homini."][quizStep]}</p><form id="quiz-form">${quizStep === 0 ? `<fieldset class="purpose-options"><legend class="sr-only">Для чего нужна постройка?</legend>${[...new Set([...(quizData.purpose && !purposes.includes(quizData.purpose) ? [quizData.purpose] : []), ...purposes])].map((p) => `<label><input type="radio" name="purpose" value="${escapeHtml(p)}" ${quizData.purpose === p ? "checked" : ""} required/><span>${escapeHtml(p)} ${diagonal}</span></label>`).join("")}</fieldset>` : quizStep === 1 ? `<div class="field"><label class="field-label" for="quiz-region">Местоположение участка</label><input id="quiz-region" name="region" placeholder="Например, Московская область, Истра" autocomplete="address-level2" maxlength="160" value="${escapeHtml(quizData.region)}" required/></div>` : `<div class="field"><label class="field-label" for="quiz-contact">Телефон, Telegram или email</label><input id="quiz-contact" name="contact" placeholder="Как с вами связаться?" maxlength="160" value="${escapeHtml(quizData.contact)}" required/></div><div class="check-field"><label class="check-label"><input type="checkbox" name="consent" required/><span>Понимаю, что письмо нужно проверить и отправить в моём почтовом приложении.</span></label></div>`}<div class="quiz-actions">${quizStep ? '<button type="button" id="quiz-back" class="back-button">← Назад</button>' : '<span class="quiz-time">Всего три простых шага</span>'}<button type="submit" class="button button-dark">${quizStep === 2 ? "Подготовить заявку" : "Дальше"} ${arrow}</button></div></form>`;
   const form = document.querySelector("#quiz-form");
+  const validation = bindValidation(form);
   form.addEventListener("submit", (e) => {
     e.preventDefault();
+    if (!validation.validateAll()) return;
     const data = new FormData(form);
-    if (quizStep === 0) quizData.purpose = data.get("purpose");
+    if (quizStep === 0) {
+      quizData.purpose = data.get("purpose");
+      selectPurpose(quizData.purpose);
+    }
     if (quizStep === 1) quizData.region = data.get("region").trim();
     if (quizStep === 2) {
       quizData.contact = data.get("contact").trim();
-      if (!validateContact(form.querySelector('[name="contact"]'))) return;
       const request = { ...quizData };
       document.querySelector("#quiz-dialog").close();
       showRequest(request);
       return;
     }
-    if (
-      quizStep === 1 &&
-      !validateNonBlank(form.querySelector('[name="region"]'))
-    )
-      return;
     quizStep++;
     renderQuiz();
     document.querySelector("#quiz-title").setAttribute("tabindex", "-1");
@@ -170,47 +188,15 @@ function renderQuiz() {
     quizStep--;
     renderQuiz();
   });
-  form
-    .querySelectorAll("input")
-    .forEach((input) =>
-      input.addEventListener("input", () => input.setCustomValidity("")),
-    );
-}
-function validateNonBlank(input) {
-  input.setCustomValidity(input.value.trim() ? "" : "Заполните это поле.");
-  return input.reportValidity();
-}
-function validateContact(input) {
-  const value = input.value.trim();
-  const valid =
-    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) ||
-    /^@[A-Za-z][A-Za-z0-9_]{4,31}$/.test(value) ||
-    /^https:\/\/(t\.me|telegram\.me)\/[A-Za-z][A-Za-z0-9_]{4,31}\/?$/.test(
-      value,
-    ) ||
-    (/^[+\d\s()\-]+$/.test(value) &&
-      value.replace(/\D/g, "").length >= 10 &&
-      value.replace(/\D/g, "").length <= 15);
-  input.setCustomValidity(
-    valid
-      ? ""
-      : "Укажите телефон с кодом страны, email или Telegram в формате @username.",
-  );
-  return input.reportValidity();
 }
 const contactForm = document.querySelector("#contact-form");
-contactForm
-  .querySelectorAll("input")
-  .forEach((input) =>
-    input.addEventListener("input", () => input.setCustomValidity("")),
-  );
+const contactValidation = bindValidation(contactForm);
+contactForm.elements.purpose.addEventListener("change", () => {
+  selectedPurpose = contactForm.elements.purpose.value;
+});
 contactForm.addEventListener("submit", (e) => {
   e.preventDefault();
-  if (
-    !validateNonBlank(contactForm.elements.region) ||
-    !validateContact(contactForm.elements.contact)
-  )
-    return;
+  if (!contactValidation.validateAll()) return;
   const data = new FormData(contactForm);
   showRequest({
     purpose: data.get("purpose"),
@@ -218,6 +204,8 @@ contactForm.addEventListener("submit", (e) => {
     contact: data.get("contact").trim(),
   });
   contactForm.reset();
+  contactValidation.reset();
+  selectedPurpose = "";
 });
 function showRequest(data) {
   document.querySelector("#request-text").value =
