@@ -4,7 +4,8 @@
 
 - **[Открыть макет блока на компьютере](desktop.png)**
 - **[Открыть мобильную версию](mobile.png)**
-- [Новое изображение летней кухни](kitchen-evening.webp)
+- **[Новое изображение летней кухни — PNG](kitchen-evening.png)**
+- [Изображение в WebP](kitchen-evening.webp)
 
 ![Макет блока на компьютере](desktop.png)
 
