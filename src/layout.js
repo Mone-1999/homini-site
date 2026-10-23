@@ -77,11 +77,11 @@ function renderCatalog() {
 
 function renderDetails() {
   return `<section class="details-section" id="details" aria-labelledby="details-title">
-    <div class="detail-copy"><p class="eyebrow">Характер Homini — в деталях</p><h2 id="details-title">Продумано<br>до соединения.</h2><p>Светлое дерево и чёрный металл. Одна узнаваемая деталь связывает постройки в целую коллекцию.</p>
-      <ul class="detail-list"><li>${icon("joint")}<div><h3>Выразительный узел</h3><p>Открытые соединения становятся частью архитектуры.</p></div></li><li>${icon("leaf")}<div><h3>Естественная фактура</h3><p>Дерево задаёт тёплый тон, металл подчёркивает линии.</p></div></li></ul>
-      <button class="text-link" data-quiz>Обсудить комплектацию ${arrow}</button>
+    <div class="detail-copy"><p class="eyebrow">Homini — место для встреч</p><h2 id="details-title">Для встреч, которые<br>хочется продлить.</h2><p>Готовить вместе, собираться за одним столом и никуда не спешить. Для ваших тёплых вечеров.</p>
+      <ul class="detail-list"><li>${icon("utensils")}<div><h3>Готовить с удовольствием</h3><p>Рабочая зона и место для гриля — всё рядом.</p></div></li><li>${icon("people")}<div><h3>Оставаться подольше</h3><p>Большой стол и тёплый свет для долгих разговоров.</p></div></li></ul>
+      <button class="text-link" data-product="kitchen">Выбрать летнюю кухню ${arrow}</button>
     </div>
-    <figure class="detail-picture"><img src="${imagePath("connector-detail")}" alt="Визуализация: металлический коннектор в соединении деревянных балок" width="1254" height="1254" loading="lazy" decoding="async"><figcaption class="caption">Визуализация соединения</figcaption></figure>
+    <figure class="detail-picture"><img src="${imagePath("kitchen-evening")}" alt="Визуализация летней кухни Homini в вечернем саду с сервированным столом" width="1254" height="1254" loading="lazy" decoding="async"><figcaption class="caption">Вечер на участке · визуализация</figcaption></figure>
   </section>`;
 }
 

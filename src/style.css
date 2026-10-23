@@ -517,6 +517,7 @@ summary {
   background: #e8dfd4;
 }
 .details-section {
+  min-height: 40.9375rem;
   max-width: 1440px;
   margin-inline: auto;
   display: grid;
@@ -559,7 +560,7 @@ summary {
 .detail-list p {
   font-size: 0.875rem;
   color: var(--muted);
-  max-width: 24rem;
+  max-width: 20rem;
 }
 .detail-picture {
   position: relative;
@@ -1446,6 +1447,7 @@ dialog::backdrop {
     height: 1.125rem;
   }
   .details-section {
+    min-height: 0;
     grid-template-columns: 1fr;
   }
   .detail-copy {

@@ -1,5 +1,9 @@
 // A small consistent set of line icons; decoration stays out of accessible names.
 const paths = {
+  utensils:
+    '<path d="M4 3v6a2 2 0 0 0 4 0V3M6 3v18M18 3c-3 2-4 5-4 9h4m0-9v18"/>',
+  people:
+    '<circle cx="9" cy="7" r="3"/><path d="M3 21v-3a6 6 0 0 1 12 0v3M16 4a3 3 0 0 1 0 6m2 3a5 5 0 0 1 3 5v3"/>',
   arrow: '<path d="M5 12h14m-5-5 5 5-5 5"/>',
   previous: '<path d="M19 12H5m5-5-5 5 5 5"/>',
   diagonal: '<path d="M6 18 18 6M6 6h12v12"/>',
